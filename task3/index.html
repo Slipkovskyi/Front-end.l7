@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        #container {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 300px;
+            height: 200px;
+            overflow: hidden;
+            border: black 1px solid;
+        }
+        #btn {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            cursor: pointer;
+        }
+    </style>
+    <title>Runaway Button</title>
+</head>
+<body>
+<div id="container">
+    <button id="btn" onmouseover="moveButton()">Click me</button>
+</div>
+
+<script>
+    function moveButton() {
+        var container = document.getElementById('container');
+        var button = document.getElementById('btn');
+
+        // Генеруємо випадкові координати для нового положення кнопки
+        var maxX = container.clientWidth - button.clientWidth;
+        var maxY = container.clientHeight - button.clientHeight;
+
+        var newX = Math.floor(Math.random() * maxX);
+        var newY = Math.floor(Math.random() * maxY);
+
+        // Задаємо нові координати кнопці
+        button.style.left = newX + 'px';
+        button.style.top = newY + 'px';
+    }
+</script>
+</body>
+</html>

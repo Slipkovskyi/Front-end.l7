@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        .circle {
+            position: absolute;
+            border-radius: 50%;
+            transition: background-color 0.3s;
+        }
+
+        .active {
+            border: 2px solid black;
+        }
+    </style>
+</head>
+<body>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const numberOfCircles = 20;
+        const minRadius = 10;
+        const maxRadius = 30;
+        const circleContainer = document.body;
+
+        // Generate random circles
+        for (let i = 0; i < numberOfCircles; i++) {
+            const radius = Math.floor(Math.random() * (maxRadius - minRadius + 1)) + minRadius;
+            const circle = document.createElement('div');
+            circle.className = 'circle';
+            circle.style.width = circle.style.height = `${2 * radius}px`;
+            circle.style.backgroundColor = getRandomColor();
+            circle.style.top = `${Math.random() * window.innerHeight}px`;
+            circle.style.left = `${Math.random() * window.innerWidth}px`;
+            circleContainer.appendChild(circle);
+        }
+
+        // Set the first circle as active
+        const circles = document.querySelectorAll('.circle');
+        let currentActiveIndex = 0;
+        circles[currentActiveIndex].classList.add('active');
+
+        // Handle Tab and Shift-Tab key presses
+        document.addEventListener('keydown', function (event) {
+            if (event.key === 'Tab' && !event.shiftKey) {
+                event.preventDefault();
+                currentActiveIndex = (currentActiveIndex + 1) % circles.length;
+            } else if (event.key === 'Tab' && event.shiftKey) {
+                event.preventDefault();
+                currentActiveIndex = (currentActiveIndex - 1 + circles.length) % circles.length;
+            }
+
+            updateActiveCircle();
+        });
+
+        // Handle arrow key presses
+        document.addEventListener('keydown', function (event) {
+            const step = 10;
+
+            switch (event.key) {
+                case 'ArrowUp':
+                    circles[currentActiveIndex].style.top = `${parseFloat(circles[currentActiveIndex].style.top) - step}px`;
+                    break;
+                case 'ArrowDown':
+                    circles[currentActiveIndex].style.top = `${parseFloat(circles[currentActiveIndex].style.top) + step}px`;
+                    break;
+                case 'ArrowLeft':
+                    circles[currentActiveIndex].style.left = `${parseFloat(circles[currentActiveIndex].style.left) - step}px`;
+                    break;
+                case 'ArrowRight':
+                    circles[currentActiveIndex].style.left = `${parseFloat(circles[currentActiveIndex].style.left) + step}px`;
+                    break;
+            }
+        });
+
+        // Helper function to update the active circle
+        function updateActiveCircle() {
+            circles.forEach((circle, index) => {
+                circle.classList.remove('active');
+                if (index === currentActiveIndex) {
+                    circle.classList.add('active');
+                }
+            });
+        }
+
+        // Helper function to generate a random color
+        function getRandomColor() {
+            const letters = '0123456789ABCDEF';
+            let color = '#';
+            for (let i = 0; i < 6; i++) {
+                color += letters[Math.floor(Math.random() * 16)];
+            }
+            return color;
+        }
+    });
+</script>
+
+</body>
+</html>

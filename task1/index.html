@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        #container {
+            position: relative;
+            width: 400px;
+            height: 400px;
+            border: 2px solid #000;
+        }
+
+        .draggable {
+            position: absolute;
+            cursor: grab;
+        }
+
+        #square1, #square2, #square3 {
+            border: 2px solid #000;
+        }
+        #square1 {
+            background-color: #f00;
+            width: 50px;
+            height: 50px;
+        }
+        #square2 {
+            background-color: #0f0;
+            width: 75px;
+            height: 75px;
+        }
+        #square3 {
+            background-color: #00f;
+            width: 100px;
+            height: 100px;
+        }
+    </style>
+    <title>Draggable Squares</title>
+</head>
+<body>
+<div id="container">
+    <div class="draggable" id="square1"></div>
+    <div class="draggable" id="square2"></div>
+    <div class="draggable" id="square3"></div>
+    <!-- Add more squares if needed -->
+</div>
+
+<script>
+    // Функція для обробки подій перетягування
+    function handleDraggable(element) {
+        let isDragging = false;
+        let offsetX, offsetY;
+
+        element.addEventListener('mousedown', (e) => {
+            isDragging = true;
+
+            // Запам'ятовуємо початкові координати миші та розташування елемента
+            offsetX = e.clientX - element.getBoundingClientRect().left;
+            offsetY = e.clientY - element.getBoundingClientRect().top;
+
+            // Змінюємо стиль курсору та встановлюємо властивість перетягування
+            element.style.cursor = 'grabbing';
+            element.style.zIndex = 1000;
+
+            // Запобігаємо вибору тексту під час перетягування
+            document.body.style.userSelect = 'none';
+        });
+
+        document.addEventListener('mousemove', (e) => {
+            if (!isDragging) return;
+
+            // Обчислюємо нові координати для елемента
+            const x = e.clientX - offsetX;
+            const y = e.clientY - offsetY;
+
+            // Обмежуємо рух елемента в межах контейнера
+            const maxX = container.clientWidth - element.clientWidth;
+            const maxY = container.clientHeight - element.clientHeight;
+
+            element.style.left = `${Math.min(maxX, Math.max(0, x))}px`;
+            element.style.top = `${Math.min(maxY, Math.max(0, y))}px`;
+        });
+
+        document.addEventListener('mouseup', () => {
+            if (!isDragging) return;
+
+            // Завершення перетягування
+            isDragging = false;
+            element.style.cursor = 'grab';
+            element.style.zIndex = 1;
+            document.body.style.userSelect = 'auto';
+        });
+    }
+
+    // Отримуємо контейнер та всі перетягувальні елементи
+    const container = document.getElementById('container');
+    const squares = document.querySelectorAll('.draggable');
+
+    // Застосовуємо обробку подій до кожного перетягувального елемента
+    squares.forEach(square => handleDraggable(square));
+</script>
+</body>
+</html>

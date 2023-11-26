@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    .selected {
+      background-color: lightblue;
+    }
+    li{
+      cursor: pointer;
+      font-size: 20px;
+      max-width: fit-content;
+    }
+  </style>
+  <title>Selectable List</title>
+</head>
+<body>
+
+<ul id="selectableList">
+  <li>Item 1</li>
+  <li>Item 2</li>
+  <li>Item 3</li>
+  <li>Item 4</li>
+  <li>Item 5</li>
+</ul>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const list = document.getElementById("selectableList");
+    const items = list.getElementsByTagName("li");
+
+    let ctrlPressed = false;
+
+    list.addEventListener("click", function (event) {
+      const clickedItem = event.target;
+
+      if (ctrlPressed) {
+        // Toggle selection on Ctrl (Cmd) click
+        clickedItem.classList.toggle("selected");
+      } else {
+        // Single selection on regular click
+        resetSelection();
+        clickedItem.classList.add("selected");
+      }
+    });
+
+    document.addEventListener("keydown", function (event) {
+      // Detect Ctrl (Cmd) key press
+      if (event.ctrlKey || event.metaKey) {
+        ctrlPressed = true;
+      }
+    });
+
+    document.addEventListener("keyup", function () {
+      // Detect Ctrl (Cmd) key release
+      ctrlPressed = false;
+    });
+
+    function resetSelection() {
+      // Remove "selected" class from all items
+      for (const item of items) {
+        item.classList.remove("selected");
+      }
+    }
+  });
+</script>
+
+</body>
+</html>
